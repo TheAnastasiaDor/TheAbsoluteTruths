@@ -23,9 +23,8 @@ main {
 
 footer {
     text-align: center;
-    margin: 10px 0;
-    position: relative;
     width: 100%;
+    margin-top: 60px;
 }
 
 h1 {
@@ -72,6 +71,9 @@ img {
     left: calc(50% - 40vw); /* Adjust the position as needed */
     transform: scale(0.5); /* Reduce size to 50% */
     transform-origin: top left; /* Scale from top left corner */
+    z-index: 100;
+    width: 200px;
+    height: 200px;
 }
 
 #trash-icon {

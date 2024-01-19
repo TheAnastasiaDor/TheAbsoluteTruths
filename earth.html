@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,16 +16,14 @@
 </head>
 <body>
     <script>
-        let earth, hammer, science;
+        let earth, hammer;
         let stars = [], numStars = 1500;
         let shootingStars = [], numShootingStars = 3;
-        let hammerAngle = 0, maxHammerAngle = -PI / 4;
+        let hammerAngle = 0, maxHammerAngle;
         const startEarthHeight = 400, steps = 7;
         let stepIndex = 0, h = startEarthHeight, targetH = h;
         const minEarthSize = startEarthHeight - (startEarthHeight / steps) * 6;
         let hammerPressed = false;
-        let scienceDisplayed = false;
-        let scienceX, scienceY;
 
         class Star {
             constructor() {
@@ -85,13 +82,13 @@
         }
 
         function preload() {
-            earth = loadImage('./earth1.png'); 
-            hammer = loadImage('./hammer.png'); 
-            science = loadImage('./science.png'); // Ensure this is defined in the global scope
+            earth = loadImage('./earth1.png'); // Replace with path to your earth image
+            hammer = loadImage('./hammer.png'); // Replace with path to your hammer image
         }
 
         function setup() {
             createCanvas(windowWidth, windowHeight);
+            maxHammerAngle = -PI / 4;
             noStroke();
             for (let i = 0; i < numStars; i++) stars.push(new Star());
             for (let i = 0; i < numShootingStars; i++) shootingStars.push(new ShootingStar());
@@ -102,18 +99,22 @@
             background(2, 5, 15);
 
             stars.forEach(star => star.display());
-            shootingStars.forEach(shootingStar => shootingStar.update());
+            shootingStars.forEach(s => { s.update(); s.display(); });
 
             let earthX = width / 2, earthY = height / 2 + startEarthHeight / 4;
-            h = lerp(h, targetH, 0.1);
             if (earth) image(earth, earthX, earthY, startEarthHeight, h);
+            h = lerp(h, targetH, 0.1);
 
             let hammerScale = startEarthHeight * 0.4 / hammer.height;
             let hammerWidth = hammer.width * hammerScale;
             let hammerHeight = hammer.height * hammerScale;
-            let hammerX = earthX + hammerWidth * 0.2; // Adjust the hammer position
-            let hammerY = earthY - startEarthHeight * 0.6;
+            let hammerX = earthX, hammerY = earthY - startEarthHeight * 0.6;
 
+            // Calculate new hammerX position
+    let hammerOffset = hammerWidth * 0.4; // 20% of the hammer width
+    hammerX = earthX + hammerOffset; // New X position of the hammer
+    hammerY = earthY - startEarthHeight * 0.6;
+    
             if (hammer) {
                 push();
                 translate(hammerX, hammerY);
@@ -124,4 +125,26 @@
 
             if (hammerPressed) {
                 hammerAngle = lerp(hammerAngle, maxHammerAngle, 0.1);
-                if (
+                if (abs(hammerAngle - maxHammerAngle) < 0.05) {
+                    hammerPressed = false;
+                    hammerAngle = 0;
+                }
+            }
+        }
+
+        function mousePressed() {
+            if (stepIndex < steps) {
+                hammerPressed = true;
+                let newTargetH = targetH - (startEarthHeight / steps);
+                if (newTargetH > minEarthSize) {
+                    targetH = newTargetH;
+                } else {
+                    targetH = minEarthSize;
+                    window.location.href = 'win.html';
+                }
+                stepIndex++;
+            }
+        }
+    </script>
+</body>
+</html>
