@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let earth, hammer;
+        let stars = [], numStars = 1500;
+        let shootingStars = [], numShootingStars = 3;
+        let hammerAngle = 0, maxHammerAngle;
+        const startEarthHeight = 400, steps = 7;
+        let stepIndex = 0, h = startEarthHeight, targetH = h;
+        const minEarthSize = startEarthHeight - (startEarthHeight / steps) * 6;
+        let hammerPressed = false;
+
+        class Star {
+            constructor() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(0.5, 2.5);
+                this.alpha = random(100, 255);
+
+                if (random(1) < 0.5) {
+                    this.color = color(255, 223, 0, this.alpha); // Gold
+                } else {
+                    this.color = color(192, 192, 192, this.alpha); // Silver
+                }
+            }
+
+            display() {
+                fill(this.color);
+                ellipse(this.x, this.y, this.size);
+            }
+        }
+
+        class ShootingStar {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = random(width);
+                this.y = random(height);
+                this.size = random(10, 25);
+                this.speed = random(6, 10);
+                this.angle = random(TWO_PI);
+
+                if (random(1) < 0.5) {
+                    this.color = color(255, 223, 0); // Gold
+                } else {
+                    this.color = color(192, 192, 192); // Silver
+                }
+            }
+
+            update() {
+                this.x += this.speed * cos(this.angle);
+                this.y += this.speed * sin(this.angle);
+
+                if (this.x > width || this.x < 0 || this.y > height || this.y < 0) {
+                    this.reset();
+                }
+            }
+
+            display() {
+                stroke(this.color);
+                strokeWeight(1);
+                line(this.x, this.y, this.x - this.size * cos(this.angle), this.y - this.size * sin(this.angle));
+                noStroke();
+            }
+        }
+
+        function preload() {
+            earth = loadImage('./earth1.png'); // Replace with path to your earth image
+            hammer = loadImage('./hammer.png'); // Replace with path to your hammer image
+        }
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            maxHammerAngle = -PI / 4;
+            noStroke();
+            for (let i = 0; i < numStars; i++) stars.push(new Star());
+            for (let i = 0; i < numShootingStars; i++) shootingStars.push(new ShootingStar());
+            imageMode(CENTER);
+        }
+
+        function draw() {
+            background(2, 5, 15);
+
+            stars.forEach(star => star.display());
+            shootingStars.forEach(s => { s.update(); s.display(); });
+
+            let earthX = width / 2, earthY = height / 2 + startEarthHeight / 4;
+            if (earth) image(earth, earthX, earthY, startEarthHeight, h);
+            h = lerp(h, targetH, 0.1);
+
+            let hammerScale = startEarthHeight * 0.4 / hammer.height;
+            let hammerWidth = hammer.width * hammerScale;
+            let hammerHeight = hammer.height * hammerScale;
+            let hammerX = earthX, hammerY = earthY - startEarthHeight * 0.6;
+
+            // Calculate new hammerX position
+    let hammerOffset = hammerWidth * 0.4; // 20% of the hammer width
+    hammerX = earthX + hammerOffset; // New X position of the hammer
+    hammerY = earthY - startEarthHeight * 0.6;
+    
+            if (hammer) {
+                push();
+                translate(hammerX, hammerY);
+                rotate(hammerAngle);
+                image(hammer, 0, 0, hammerWidth, hammerHeight);
+                pop();
+            }
+
+            if (hammerPressed) {
+                hammerAngle = lerp(hammerAngle, maxHammerAngle, 0.1);
+                if (abs(hammerAngle - maxHammerAngle) < 0.05) {
+                    hammerPressed = false;
+                    hammerAngle = 0;
+                }
+            }
+        }
+
+        function mousePressed() {
+            if (stepIndex < steps) {
+                hammerPressed = true;
+                let newTargetH = targetH - (startEarthHeight / steps);
+                if (newTargetH > minEarthSize) {
+                    targetH = newTargetH;
+                } else {
+                    targetH = minEarthSize;
+                }
+                stepIndex++;
+            }
+        }
+    </script>
+</body>
+</html>

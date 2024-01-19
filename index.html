@@ -1,56 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My p5.js Page</title>
-    <script src="./p5.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-        }
-    </style>
+    <title>The DEFINITIVE Truths of the World</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <header>
+        <h1>The DEFINITIVE Truths of the World</h1>
+        <h2><em>Written by the Winners</em></h2>
+    </header>
+    <main>
+        <div class="click-to-play">Click 2 Play</div>
+        <div class="buttons">
+            <button id="astronomy">Astronomy</button>
+            <button id="world-history">World History</button>
+        </div>
+    </main>
     <script>
-        let earth, space;
-
-        function preload() {
-            earth = loadImage('./earth1.png');
-            space = loadImage('./sky.png');
-            hammer = loadImage('./hammer.png');
-        }
-
-        // Your p5.js code goes here
-        function setup() {
-            createCanvas(windowWidth, windowHeight);
-        }
-
-        const startEarthHeight = 400;
-        const w = startEarthHeight;
-        const steps = 7 + 1;
-        let stepIndex = 0;
-        let h = startEarthHeight;
-        let targetH = h;
-
-        function draw() {
-            background(0);
-            image(space, (width - w) / 2, (height - w) / 2, w, w);
-
-            image(earth, (width - w) / 2, (height - h) / 2, w, h);
-
-            h = lerp(h, targetH, 0.1);
-        }
-
-        function mousePressed() {
-            targetH -= (startEarthHeight / steps);
-        }
+        document.getElementById('astronomy').addEventListener('click', function() {
+            window.location.href = 'earth.html';
+        });
+        document.getElementById('world-history').addEventListener('click', function() {
+            window.location.href = 'g7.html';
+        });
     </script>
 </body>
-
 </html>
