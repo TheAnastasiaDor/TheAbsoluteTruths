@@ -10,7 +10,7 @@ body, html {
 
 header {
     text-align: center;
-    margin: 10px 0;
+    margin: 12px 0;
 }
 
 main {
@@ -24,17 +24,13 @@ main {
 footer {
     text-align: center;
     margin: 10px 0;
+    position: relative;
+    width: 100%;
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 3em;
     margin: 0.67em 0;
-}
-
-h2 {
-    font-size: 1.2em;
-    font-style: italic;
-    margin: 0.5em 0;
 }
 
 button {
@@ -50,6 +46,56 @@ button:hover {
     background-color: #EDEDD3;
 }
 
-footer p {
-    font-size: 0.8em;
+#table-of-contents {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+img {
+    max-width: 80vw;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+#merkel {
+    position: absolute;
+    cursor: pointer;
+    left: calc(50% - 40vw); /* Adjust the position as needed */
+    transform: scale(0.5); /* Reduce size to 50% */
+    transform-origin: top left; /* Scale from top left corner */
+}
+
+#trash-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 5vw; /* At least 5% of the viewport width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+#hist {
+    max-width: 100%;
+    max-height: 80vh; /* Adjust height as necessary to keep the image responsive */
+    object-fit: contain;
+}
+
+#table-of-contents {
+    background-color: #F5F5DC; /* beige color */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#table-of-contents:hover {
+    background-color: #EDEDD3;
 }
